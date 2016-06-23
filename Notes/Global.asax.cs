@@ -1,4 +1,5 @@
-﻿using Notes.Migrations;
+﻿using Notes.Classes;
+using Notes.Migrations;
 using Notes.Models;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,9 @@ namespace Notes
         protected void Application_Start()
         {
             //me permite crear cambios en la bd:
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<NotesContext,Configuration>());
+            Database.SetInitializer(new MigrateDatabaseToLatestVersion<NotesContext, Configuration>());
+
+            this.CheckRoles();
 
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);
@@ -27,5 +30,13 @@ namespace Notes
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        private void CheckRoles()
+        {
+            Utilities.CheckRole("Admin");
+            Utilities.CheckRole("Student");
+            Utilities.CheckRole("Teacher");
+        }
+
     }
 }

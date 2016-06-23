@@ -22,6 +22,6 @@ namespace Notes.Models
             base.Dispose(disposing);    
         }
 
-        public System.Data.Entity.DbSet<Notes.Models.User> Users { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

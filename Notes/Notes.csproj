@@ -178,6 +178,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Classes\Utilities.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
@@ -191,6 +192,7 @@
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\NotesContext.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Models\UserView.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -271,6 +273,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\Photos\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

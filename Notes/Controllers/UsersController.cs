@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Notes.Models;
+using Notes.Classes;
 
 namespace Notes.Controllers
 {
@@ -46,16 +47,68 @@ namespace Notes.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "UserId,UserName,FirstName,LastName,Phone,Address,Photo,IsStudent,IsTeacher")] User user)
+        public ActionResult Create(UserView view)
         {
             if (ModelState.IsValid)
             {
-                db.Users.Add(user);
-                db.SaveChanges();
+                db.Users.Add(view.User);
+
+                try
+                {
+                    db.SaveChanges();
+
+                    //Pasos para subir la foto:                   
+
+                    if (view.Photo != null)
+                    {
+                      var  pic = Utilities.UploadPhoto(view.Photo);
+
+                        if (!string.IsNullOrEmpty(pic))
+                        {
+                            view.User.Photo = $"~/Content/Photos/{pic}";    
+                        }
+
+                    }
+
+                    db.SaveChanges();
+
+                    Utilities.CreateUserASP(view.User.UserName);
+                    
+                    //pregunto que roles tiene:
+
+                    if (view.User.IsStudent)
+                    {
+                        Utilities.AddRoleToUser(view.User.UserName, "Student");
+                    }
+
+                    if (view.User.IsTeacher)
+                    {
+                        Utilities.AddRoleToUser(view.User.UserName,"Teacher");
+                    }
+
+                }
+                catch (Exception ex)
+                {
+
+                    if (ex.InnerException != null &&  ex.InnerException.InnerException!= null
+                        && ex.InnerException.InnerException.Message.Contains("index"))
+                    {
+                        ModelState.AddModelError(string.Empty,"There are record witn the same Name.");
+
+                        return View(view);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+
+                        return View(view);
+                    }
+                }
+
                 return RedirectToAction("Index");
             }
 
-            return View(user);
+            return View(view);
         }
 
         // GET: Users/Edit/5
@@ -78,15 +131,37 @@ namespace Notes.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "UserId,UserName,FirstName,LastName,Phone,Address,Photo,IsStudent,IsTeacher")] User user)
+        public ActionResult Edit(UserView view)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(user).State = EntityState.Modified;
-                db.SaveChanges();
+                db.Entry(view.User).State = EntityState.Modified;
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+
+                    if (ex.InnerException != null && ex.InnerException.InnerException != null 
+                        && ex.InnerException.Message.Contains("index"))
+                    {
+                        ModelState.AddModelError(string.Empty, "There are record witn the same records.");
+
+                        return View(view);
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, ex.Message);
+
+                        return View(view);
+                    }
+                }
+
                 return RedirectToAction("Index");
             }
-            return View(user);
+            return View(view);
         }
 
         // GET: Users/Delete/5
