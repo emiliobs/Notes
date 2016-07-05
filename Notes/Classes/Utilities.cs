@@ -45,7 +45,20 @@ namespace Notes.Classes
             }
         }
 
+        public static void ChangeEmailUserAsp(string oldEmail, string newEmail)
+        {
+            var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+            var userASP = userManager.FindByEmail(oldEmail);
+            if (userASP == null)
+            {
+                return;
+            }
 
+            userASP.UserName = newEmail;
+            userASP.Email = newEmail;
+            userManager.Update(userASP);
+
+        }
 
         public static void CreateUserASP(string email)
         {

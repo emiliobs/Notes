@@ -141,7 +141,11 @@ namespace Notes.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(view.User).State = EntityState.Modified;
+
+                var db2 = new NotesContext();
+
+                var oldUser = db2.Users.Find(view.User.UserId);
+                db2.Dispose();
 
                 //Pasos para subir la foto:                   
 
@@ -153,13 +157,26 @@ namespace Notes.Controllers
                     {
                         view.User.Photo = $"~/Content/Photos/{pic}";
                     }
+                    
 
                 }
+                else
+                {
+                    view.User.Photo = oldUser.Photo;
+                }
+
+
+
+                db.Entry(view.User).State = EntityState.Modified;
 
                 try
                 {
                     db.SaveChanges();
 
+                    if (oldUser != null && oldUser.UserName  != view.User.UserName)
+                    {
+                        Utilities.ChangeEmailUserAsp(oldUser.UserName,  view.User.UserName);
+                    }
                    
                 }
                 catch (Exception ex)
