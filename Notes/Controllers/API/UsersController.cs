@@ -12,6 +12,7 @@ using Notes.Models;
 using Newtonsoft.Json.Linq;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity;
+using Notes.Classes;
 
 namespace Notes.Controllers.API
 {
@@ -117,17 +118,52 @@ namespace Notes.Controllers.API
 
         // POST: api/Users
         [ResponseType(typeof(User))]
-        public IHttpActionResult PostUser(User user)
+        public IHttpActionResult PostUser(UserPassword userPassword)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            db.Users.Add(user);
-            db.SaveChanges();
 
-            return CreatedAtRoute("DefaultApi", new { id = user.UserId }, user);
+            var user = new User
+            {
+                Address = userPassword.Address,
+                FirstName = userPassword.FirstName,
+                IsStudent = true,
+                IsTeacher = false,
+                LastName = userPassword.LastName,
+                Phone = userPassword.Phone,
+                UserName = userPassword.UserName,
+
+            };
+
+            try
+            {
+                userPassword.IsStudent = true;
+                userPassword.IsTeacher = false;
+
+               
+
+                db.Users.Add(user);
+
+                db.SaveChanges();
+
+                Utilities.CreateUserASP(userPassword.UserName, "Student", userPassword.Password);
+               
+
+            }
+            catch (Exception ex)
+            {
+
+                return this.BadRequest(ex.Message);
+            }
+
+            //para o perder el ID del Usuario:
+            userPassword.UserId = user.UserId;
+            userPassword.IsStudent = true;
+            userPassword.IsTeacher = false;
+            return this.Ok(userPassword);
         }
 
         // DELETE: api/Users/5
@@ -142,6 +178,9 @@ namespace Notes.Controllers.API
 
             db.Users.Remove(user);
             db.SaveChanges();
+
+          
+           
 
             return Ok(user);
         }

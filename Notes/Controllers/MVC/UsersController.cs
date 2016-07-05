@@ -123,7 +123,13 @@ namespace Notes.Controllers
             {
                 return HttpNotFound();
             }
-            return View(user);
+
+            var view = new UserView
+            {
+                User = user,
+            };
+
+            return View(view);
         }
 
         // POST: Users/Edit/5
@@ -137,9 +143,24 @@ namespace Notes.Controllers
             {
                 db.Entry(view.User).State = EntityState.Modified;
 
+                //Pasos para subir la foto:                   
+
+                if (view.Photo != null)
+                {
+                    var pic = Utilities.UploadPhoto(view.Photo);
+
+                    if (!string.IsNullOrEmpty(pic))
+                    {
+                        view.User.Photo = $"~/Content/Photos/{pic}";
+                    }
+
+                }
+
                 try
                 {
                     db.SaveChanges();
+
+                   
                 }
                 catch (Exception ex)
                 {

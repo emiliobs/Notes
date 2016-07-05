@@ -45,6 +45,8 @@ namespace Notes.Classes
             }
         }
 
+
+
         public static void CreateUserASP(string email)
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
