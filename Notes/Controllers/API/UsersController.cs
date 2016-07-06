@@ -95,11 +95,23 @@ namespace Notes.Controllers.API
                 return BadRequest();
             }
 
+           
+
+
             db.Entry(user).State = EntityState.Modified;
+
+            var db2 = new NotesContext();
+            var oldUser = db.Users.Find(id);
+            db2.Dispose();
 
             try
             {
                 db.SaveChanges();
+
+                if (oldUser != null && oldUser.UserName != user.UserName)
+                {
+                    Utilities.ChangeEmailUserAsp(oldUser.UserName, user.UserName);
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -113,7 +125,7 @@ namespace Notes.Controllers.API
                 }
             }
 
-            return StatusCode(HttpStatusCode.NoContent);
+            return this.Ok(user);
         }
 
         // POST: api/Users
