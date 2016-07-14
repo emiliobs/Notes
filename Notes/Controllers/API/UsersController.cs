@@ -81,6 +81,54 @@ namespace Notes.Controllers.API
             return Ok(user);
         }
 
+        //método para cambiar el password:
+        [HttpPut]
+        [Route("ChangePassword")]
+        public IHttpActionResult ChangePassword(JObject form)
+        {
+            var userName = string.Empty;
+
+            var oldPassword = string.Empty;
+            var newPassword = string.Empty;
+            dynamic jsonObject = form;
+
+            try
+            {
+                userName = jsonObject.UserName.Value;
+                oldPassword = jsonObject.OldPassword.Value;
+                newPassword = jsonObject.NewPassword.Value;
+            }
+            catch (Exception)
+            {
+                return this.BadRequest("Incorrect Call.");
+               
+            }
+
+
+            var userContext = new ApplicationDbContext();
+            var userManger = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
+            var userASP = userManger.Find(userName, oldPassword);
+
+            if (userASP == null)
+            {
+                return this.BadRequest("User or Password Wrong.");
+            }
+
+          var response =  userManger.ChangePassword(userASP.Id, oldPassword, newPassword);
+
+            if (response.Succeeded)
+            {
+                //retorno un onjecto Json:
+                return this.Ok<object>(new { Message = "The Password was Changed Successfully." });
+            }
+            else
+            {
+                return this.BadRequest(response.Errors.ToString());
+            }
+
+        }
+        
+
         // PUT: api/Users/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutUser(int id, User user)
@@ -93,9 +141,7 @@ namespace Notes.Controllers.API
             if (id != user.UserId)
             {
                 return BadRequest();
-            }
-
-           
+            }        
 
 
             db.Entry(user).State = EntityState.Modified;
