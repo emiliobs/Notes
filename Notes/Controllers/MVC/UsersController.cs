@@ -11,6 +11,7 @@ using Notes.Classes;
 
 namespace Notes.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsersController : Controller
     {
         private NotesContext db = new NotesContext();

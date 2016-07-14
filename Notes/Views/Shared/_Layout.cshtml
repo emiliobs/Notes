@@ -21,10 +21,39 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Users", "Index", "Users")</li>
+                    <li>@Html.ActionLink("Inicio", "Index", "Home")</li>
+                    <li>@Html.ActionLink("Acerca De", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contacto", "Contact", "Home")</li>
+                    @*<li>@Html.ActionLink("Usuarios", "Index", "Users")</li>*@
+                    @if (this.User.IsInRole("Admin"))
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Administradores.<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Usuarios", "Index", "Users")</li>
+                            </ul>
+                        </li>
+                    }
+                    
+                    @if (this.User.IsInRole("Teacher"))
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Profesores.<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Ingresar Notas", "Index", "Users")</li>
+                            </ul>
+                        </li>
+                    }
+                    @if (this.User.IsInRole("Student"))
+                    {
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Estudiantes.<b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Consultar Notas", "Index", "Users")</li>
+                            </ul>
+                        </li>
+                    }
+                    
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

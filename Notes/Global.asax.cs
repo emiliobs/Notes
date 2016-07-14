@@ -12,7 +12,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Security;
 using System.Web.SessionState;
-
+using Notes.Classes;
 namespace Notes
 {
     public class MvcApplication : System.Web.HttpApplication
@@ -23,6 +23,7 @@ namespace Notes
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<NotesContext, Configuration>());
 
             this.CheckRoles();
+            Utilities.CheckSuperUser("Admin");
 
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);

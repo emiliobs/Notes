@@ -36,7 +36,7 @@ namespace Notes.Classes
         {
             var userManager = new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(userContext));
             var email = WebConfigurationManager.AppSettings["AdminUser"];
-            var password = WebConfigurationManager.AppSettings["AdminPassWord"];
+            var password = WebConfigurationManager.AppSettings["AdminPassword"];
             var userASP = userManager.FindByName(email);
             if (userASP == null)
             {
