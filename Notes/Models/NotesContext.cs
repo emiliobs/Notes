@@ -23,5 +23,7 @@ namespace Notes.Models
         }
 
         public DbSet<User> Users { get; set; }
+
+        public System.Data.Entity.DbSet<Notes.Models.Group> Groups { get; set; }
     }
 }

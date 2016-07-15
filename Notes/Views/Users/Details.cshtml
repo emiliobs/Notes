@@ -1,82 +1,131 @@
 ﻿@model Notes.Models.User
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalles";
 }
 
-<h2>Details</h2>
+<h2>Detalles</h2>
 
-<div>
-    <h4>User</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
+<div class="row">
+    <div class="col-lg-6">
+        <div>
+            <h4>Usarios</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.FirstName)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.UserName)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.LastName)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.FirstName)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Phone)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.LastName)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Phone)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.LastName)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Address)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Phone)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Address)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.Phone)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Photo)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Address)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.Photo)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.Address)
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.IsStudent)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Photo)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.IsStudent)
-        </dd>
+                <dd>
+                    @*@Html.DisplayFor(model => model.Photo)*@
+                </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.IsTeacher)
-        </dt>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IsStudent)
+                </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.IsTeacher)
-        </dd>
+                <dd>
+                    @Html.DisplayFor(model => model.IsStudent)
+                </dd>
 
-    </dl>
+                <dt>
+                    @Html.DisplayNameFor(model => model.IsTeacher)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.IsTeacher)
+                </dd>
+
+            </dl>
+        </div>
+        <p>
+            @Html.ActionLink("Editar", "Edit", new { id = Model.UserId }, new { @class = "btn btn-info" })
+            @Html.ActionLink("Regresar", "Index", new { }, new { @class = "btn btn-default" })
+        </p>
+    </div>
+    <div class="col-lg-3">
+        @if (Model.IsTeacher)
+        {
+          
+            <h4>Grupos.</h4>
+            
+            if (Model.Groups.Count == 0)
+            {
+                <h5>Not  se han asignado Grupos,</h5>
+            }
+            else
+            {
+                <table class="table">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Groups.FirstOrDefault().Description)
+                        </th>
+                        <th></th>
+                    </tr>
+
+                    @foreach (var item in Model.Groups)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                        </tr>
+                    }
+
+                </table>
+            }
+        }
+    </div>
+    <div class="col-lg-3">
+        <br />
+        <br />
+     
+        @if (!string.IsNullOrEmpty(Model.Photo))
+            {
+            <img src="@Url.Content(Model.Photo)" alt="Image" style="width:250px; height:250px;" />
+        }
+    </div>
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.UserId }, new { @class = "btn btn-info" }) 
-    @Html.ActionLink("Back to List", "Index",new { }, new { @class = "btn btn-default" })
-</p>
+

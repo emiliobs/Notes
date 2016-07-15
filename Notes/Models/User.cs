@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Notes.Models
@@ -50,6 +54,12 @@ namespace Notes.Models
 
         [Display(Name = "Is Teacher")]
         public bool IsTeacher { get; set; }
+
+        //relacion:
+      
+        public virtual ICollection<Group> Groups { get; set; }
+
+        public virtual ICollection<GroupDetail> GroupDetails { get; set; }
 
     }
 }
