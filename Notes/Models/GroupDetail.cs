@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -18,7 +19,10 @@ namespace Notes.Models
         public int UserId { get; set; }
 
         //Relación:
+        [JsonIgnore]
         public virtual Group Group { get; set; }
+
+        [JsonIgnore]
         public virtual User User { get; set; }
     }
 }

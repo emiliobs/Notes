@@ -14,6 +14,89 @@ namespace Notes.Controllers.MVC
     {
         private NotesContext db = new NotesContext();
 
+
+        //delete DelelteStudent:
+        public ActionResult DeleteStudent(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var groupDetails = db.GroupDetails.Find(id);
+
+            if (groupDetails == null)
+            {
+                return HttpNotFound();
+            }
+
+            db.GroupDetails.Remove(groupDetails);
+            db.SaveChanges();
+
+
+            return RedirectToAction($"Details/{groupDetails.GroupId}");
+        }
+
+        [HttpPost]
+        public ActionResult AddStudent(GroupDetail groupDetail)
+        {
+
+            if (ModelState.IsValid)
+            {
+
+                //buscar si el estudiante ya existe en el grupo:
+                var exist = db.GroupDetails.Where(gd => gd.GroupId == groupDetail.GroupId 
+                            && gd.UserId == groupDetail.UserId).FirstOrDefault();
+
+                if (exist == null)
+                {
+                    db.GroupDetails.Add(groupDetail);
+
+                    db.SaveChanges();
+                    return RedirectToAction($"Details/{groupDetail.GroupId}");
+                }
+
+                ModelState.AddModelError(string.Empty, "Estudiante ya matriculado en el Grupo.");
+                                
+               
+
+               
+            }
+
+            ViewBag.UserId = new SelectList(db.Users.Where(u => u.IsStudent)
+                          .OrderBy(u => u.FirstName)
+                          .ThenBy(u => u.LastName), "UserId", "FullName", groupDetail.UserId);
+
+            return View(groupDetail);
+        }
+
+        [HttpGet]
+        public ActionResult AddStudent(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var group = db.Groups.Find(id);
+
+            if (group == null)
+            {
+                return HttpNotFound();
+            }
+
+            var view = new GroupDetail
+            {
+                GroupId = id.Value,
+            };
+
+            ViewBag.UserId = new SelectList(db.Users.Where(u=>u.IsStudent)
+                            .OrderBy(u=>u.FirstName)
+                            .ThenBy(u=>u.LastName),"UserId","FullName");
+
+            return View(view);
+        }
+
         // GET: Groups
         public ActionResult Index()
         {

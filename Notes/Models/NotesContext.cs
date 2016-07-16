@@ -1,6 +1,8 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Linq;
 using System.Web;
 
@@ -14,7 +16,11 @@ namespace Notes.Models
 
         }
 
-
+        //Desactivo el borrado en cascada:
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
+        }
 
         //Cerrar la base de datos:
         protected override void Dispose(bool disposing)
@@ -24,6 +30,9 @@ namespace Notes.Models
 
         public DbSet<User> Users { get; set; }
 
-        public System.Data.Entity.DbSet<Notes.Models.Group> Groups { get; set; }
+        public DbSet<Group> Groups { get; set; }
+
+      
+        public DbSet<GroupDetail> GroupDetails { get; set; }
     }
 }

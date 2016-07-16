@@ -56,9 +56,10 @@ namespace Notes.Models
         public bool IsTeacher { get; set; }
 
         //relacion:
-      
+        [JsonIgnore]
         public virtual ICollection<Group> Groups { get; set; }
 
+        [JsonIgnore]
         public virtual ICollection<GroupDetail> GroupDetails { get; set; }
 
     }

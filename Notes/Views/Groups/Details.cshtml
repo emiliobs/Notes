@@ -6,29 +6,113 @@
 
 <h2>Detalles</h2>
 
-<div>
-    <h4>Grupos</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.User.UserName)
-        </dt>
 
-        <dd>
-            @Html.DisplayFor(model => model.User.UserName)
-        </dd>
+<div class="row">
+    <div class="col-lg-4" >
+        <div>
+            <h4>Grupos</h4>
+            <hr />
+            <dl class="dl-horizontal">
+                <dt>
+                    @*@Html.DisplayNameFor(model => model.User.UserName)*@
+                    Profesor
+                </dt>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
+                <dd>
+                    @Html.DisplayFor(model => model.User.FullName)
+                </dd>
 
-        <dd>
-            @Html.DisplayFor(model => model.Description)
-        </dd>
+                <dt>
+                    @Html.DisplayNameFor(model => model.Description)
+                </dt>
 
-    </dl>
+                <dd>
+                    @Html.DisplayFor(model => model.Description)
+                </dd>
+                <dd>
+                    <br />
+                    @if (!string.IsNullOrEmpty(Model.User.Photo))
+            {
+                        <img src="@Url.Content(Model.User.Photo)" alt="Image" style="width:200px; height:200px;" />
+                    }
+                </dd>
+
+            </dl>
+        </div>
+        
+        <p>
+            @Html.ActionLink("Editar", "Edit", new { id = Model.GroupId }, new { @class = "btn btn-info" })
+            @Html.ActionLink("Adicionar Estudiante", "AddStudent", new { id = Model.GroupId }, new { @class = "btn btn-warning" })
+            @Html.ActionLink("Regresar", "Index", new { }, new { @class = "btn btn-default" })
+        </p>
+    </div>
+    <Div class="col-lg-8">
+        <h4>Estudiantes</h4>
+        @if (Model.GroupDetails.Count == 0)
+        {
+            <h5>No hay Estudiantes Matriculados para este Grupo.</h5>
+        }
+        else
+        {
+            <table class="table">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GroupDetails.FirstOrDefault().User.UserName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GroupDetails.FirstOrDefault().User.FullName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GroupDetails.FirstOrDefault().User.Phone)
+                        </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.GroupDetails.FirstOrDefault().User.Address)
+                    </th>
+                   
+                    <th>
+                        @Html.DisplayNameFor(model => model.GroupDetails.FirstOrDefault().User.Photo)
+                    </th>                   
+                    <th></th>
+                   
+
+                </tr>
+
+                @foreach (var item in Model.GroupDetails)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.UserName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.User.Address)
+                        </td>
+                        <td>
+                            @*@Html.DisplayFor(modelItem => item.Photo)*@
+                            @*//para ver la fotocomo tal y no laruta:*@
+                            @if (!string.IsNullOrEmpty(item.User.Photo))
+                            {
+                                <img src="@Url.Content(item.User.Photo)" alt="Image" style="width:150px; height:150px;" />
+                            }
+                        </td>
+                        
+                        <td>
+                            
+                            @Html.ActionLink("Borrar", "DeleteStudent", new { id = item.GroupDetailId },
+                                             new { @class = "btn btn-danger",
+                                                   onclick ="return confirm('¿Está seguro de Borrar el Estudiante del Grupo.?')" })
+
+                        <td />
+
+                    </tr>
+                }
+
+            </table>
+        }
+    </Div>
 </div>
-<p>
-    @Html.ActionLink("Editar", "Editar", new { id = Model.GroupId }, new { @class="btn btn-info"}) 
-    @Html.ActionLink("Regresar", "Index", new { }, new { @class="btn btn-default"})
-</p>
