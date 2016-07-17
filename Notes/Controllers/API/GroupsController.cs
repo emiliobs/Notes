@@ -23,11 +23,18 @@ namespace Notes.Controllers.API
             //envio los grupos decada profesor:
             var groups = db.Groups.Where(g=>g.UserId == userId).ToList();
 
-
+            var signatures = db.GroupDetails.Where(gd=>gd.UserId == userId).ToList();
+            var matters = new List<Group>();
+            foreach (var signature in signatures)
+            {
+                matters.Add(db.Groups.Find(signature.GroupId));
+            }
             //Encabezado para el JSon:
             var response = new
             {
                 MyGroups = groups,
+                MySignatures = matters,
+
             };
 
             return Ok(response);
