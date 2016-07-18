@@ -17,6 +17,28 @@ namespace Notes.Controllers.API
     {
         private NotesContext db = new NotesContext();
 
+        [Route("GetStudents/{groupId}")]
+        public IHttpActionResult GetStudents(int groupId)
+        {
+
+            var studnets = db.GroupDetails.Where(gd => gd.GroupId == groupId).ToList();
+
+            var myStudents = new List<object>();
+            foreach (var student in studnets)
+            {
+                //busco al studiante:
+                var myStudent = db.Users.Find(student.UserId);
+                myStudents.Add(new {
+
+                    GroupDetailId = student.GroupDetailId,
+                    GroupId = student.GroupId,
+                    Student = myStudent,
+                });
+            }
+
+            return Ok(myStudents);
+        }
+
         [Route("GetGroups/{userId}")]
         public IHttpActionResult GetGroups(int userId)
         {

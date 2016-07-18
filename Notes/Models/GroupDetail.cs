@@ -24,5 +24,8 @@ namespace Notes.Models
 
         [JsonIgnore]
         public virtual User User { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Note> Notes { get; set; }
     }
 }
