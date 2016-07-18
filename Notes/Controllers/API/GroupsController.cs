@@ -24,10 +24,24 @@ namespace Notes.Controllers.API
             var groups = db.Groups.Where(g=>g.UserId == userId).ToList();
 
             var signatures = db.GroupDetails.Where(gd=>gd.UserId == userId).ToList();
-            var matters = new List<Group>();
+
+            var matters = new List<object>();
+
             foreach (var signature in signatures)
             {
-                matters.Add(db.Groups.Find(signature.GroupId));
+                //busco el profesor de la materia:
+                var teacher = db.Users.Find(signature.Group.UserId);
+
+                matters.Add
+                    (new
+                    {
+                       GroupId = signature.GroupId,
+                       Description = signature.Group.Description,
+                       Teacher = teacher
+                    }
+                       );
+
+                //matters.Add(db.Groups.Find(signature.GroupId));
             }
             //Encabezado para el JSon:
             var response = new
