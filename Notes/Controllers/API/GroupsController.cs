@@ -19,6 +19,14 @@ namespace Notes.Controllers.API
     {
         private NotesContext db = new NotesContext();
 
+        [HttpGet]
+        [Route("GetNote/{groupId}/{userId}")]
+        public IHttpActionResult GetNote(int groupId, int userId)
+        {
+            TO DO??
+                61 - Notes video
+        }
+
         [HttpPost]
         [Route("SaveNotes")]
         public IHttpActionResult SaveNotes(JObject form)
@@ -26,7 +34,38 @@ namespace Notes.Controllers.API
 
             var myStudentsResponse = JsonConvert.DeserializeObject<MyStudentsResponse>(form.ToString());
 
-            return Ok(true);
+            //transacciones en mvc:
+            using (var transaction = db.Database.BeginTransaction())
+            {
+                try
+                {
+                    foreach (var student   in myStudentsResponse.Students)
+                    {
+                        var note = new Note
+                        {
+                                GroupDetailId = student.GroupDetailId,
+                                Percentaje = (float)myStudentsResponse.Percentage,
+                                Qualification = (float)student.Note,
+                        };
+
+                        db.Notes.Add(note);
+                    }
+
+                    db.SaveChanges();
+                    transaction.Commit();
+
+                    return Ok(true);
+                }
+                catch (Exception ex)
+                {
+
+                    transaction.Rollback();
+                    return BadRequest(ex.Message);
+                    
+                }
+            }
+
+           
             //double percentage = 0;
             //var students = new List<MyStudent>();
             //dynamic jsonObject = form;
