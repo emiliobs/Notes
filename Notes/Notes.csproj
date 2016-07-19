@@ -195,8 +195,10 @@
     <Compile Include="Models\GroupDetail.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\MyStudentsResponse.cs" />
     <Compile Include="Models\Note.cs" />
     <Compile Include="Models\NotesContext.cs" />
+    <Compile Include="Models\MyStudent.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Models\UserPassword.cs" />
     <Compile Include="Models\UserView.cs" />

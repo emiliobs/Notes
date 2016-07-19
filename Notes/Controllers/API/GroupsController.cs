@@ -9,6 +9,8 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Notes.Models;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
 
 namespace Notes.Controllers.API
 {
@@ -16,6 +18,32 @@ namespace Notes.Controllers.API
     public class GroupsController : ApiController
     {
         private NotesContext db = new NotesContext();
+
+        [HttpPost]
+        [Route("SaveNotes")]
+        public IHttpActionResult SaveNotes(JObject form)
+        {
+
+            var myStudentsResponse = JsonConvert.DeserializeObject<MyStudentsResponse>(form.ToString());
+
+            return Ok(true);
+            //double percentage = 0;
+            //var students = new List<MyStudent>();
+            //dynamic jsonObject = form;
+
+            //try
+            //{
+            //    percentage = jsonObject.Percentage.Value;
+            //    students = jsonObject.Students.value;
+            //}
+            //catch 
+            //{
+
+            //    return this.BadRequest("Incorrect Call.");
+            //}
+
+        }
+
 
         [Route("GetStudents/{groupId}")]
         public IHttpActionResult GetStudents(int groupId)
@@ -95,6 +123,7 @@ namespace Notes.Controllers.API
             return Ok(group);
         }
 
+        [HttpPut]
         // PUT: api/Groups/5
         [ResponseType(typeof(void))]
         public IHttpActionResult PutGroup(int id, Group group)
@@ -130,6 +159,7 @@ namespace Notes.Controllers.API
             return StatusCode(HttpStatusCode.NoContent);
         }
 
+        [HttpPost]
         // POST: api/Groups
         [ResponseType(typeof(Group))]
         public IHttpActionResult PostGroup(Group group)
@@ -145,6 +175,7 @@ namespace Notes.Controllers.API
             return CreatedAtRoute("DefaultApi", new { id = group.GroupId }, group);
         }
 
+        [HttpDelete]
         // DELETE: api/Groups/5
         [ResponseType(typeof(Group))]
         public IHttpActionResult DeleteGroup(int id)
