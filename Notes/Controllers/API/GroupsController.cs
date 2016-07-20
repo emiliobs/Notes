@@ -23,8 +23,21 @@ namespace Notes.Controllers.API
         [Route("GetNote/{groupId}/{userId}")]
         public IHttpActionResult GetNote(int groupId, int userId)
         {
-            TO DO??
-                61 - Notes video
+            var noteDef = 0.0;
+            var notes = db.GroupDetails.Where(gd => gd.GroupId == gd.GroupId && gd.UserId == userId).ToList();
+
+            foreach (var  note in notes)
+            {
+                foreach (var note2 in note.Notes)
+                {
+                    noteDef += note2.Percentaje * note2.Qualification;
+                }
+            }
+
+            return Ok<object>(new
+            {
+                Note = noteDef,
+            });
         }
 
         [HttpPost]
